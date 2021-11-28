@@ -1,56 +1,28 @@
 let weather = {
-  "apiKey": "369494c888c8ee42271c8f4fc1783da4",
-  fetchWeather: function() {
-    fetch("https://api.openweathermap.org/data/2.5/weather?q=Tokyo&units=imperial&appid=369494c888c8ee42271c8f4fc1783da4")
-    
-    .then((reponse) => reponse.json())
-    .then((data) => console.log(data));
+  // https://api.openweathermap.org/data/2.5/weather?q=Tokyo&units=imperial&appid=369494c888c8ee42271c8f4fc1783da4
+
+  apiKey: "369494c888c8ee42271c8f4fc1783da4",
+  fetchWeather: function(city) {
+    fetch(
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+       city + 
+       "&units=imperial&appid=" + 
+       this.apiKey 
+    )    
+      .then((reponse) => reponse.json())
+      .then((data) => this.displayWeather(data));
+  },
+  displayWeather: function(data) {
+    const { name } = data;
+    const { icon, description } = data.weather[0];
+    const { temp, humidity } = data.main;
+    const { speed } = data.wind;
+    console.log(name,icon,description,temp,humidity,speed);
+    document.querySelector(".city").innerText = "Weather in " + name;
+    document.querySelector("icon").src = "https://openweathermap.org/img/wn/" + icon + ".png";
+    document.querySelector(".description").innerText = description;
+    document.querySelector(".temp").innerText = temp + "°F";
+    document.querySelector(".humidity").innnerText = "Humidity: " + humidity + "%";
+    document.querySelector(".wind").innerText = "wind Speed:" + speed + "mph";
   }
 }
-
-/*
-// 20211126155410
-// https://api.openweathermap.org/data/2.5/weather?q=Tokyo&units=imperial&appid=369494c888c8ee42271c8f4fc1783da4
-
-{
-  "coord": {
-    "lon": 139.6917,
-    "lat": 35.6895
-  },
-  "weather": [
-    {
-      "id": 801,
-      "main": "Clouds",
-      "description": "few clouds",
-      "icon": "02n"
-    }
-  ],
-  "base": "stations",
-  "main": {
-    "temp": 46.06,
-    "feels_like": 39.92,
-    "temp_min": 38.44,
-    "temp_max": 49.62,
-    "pressure": 1018,
-    "humidity": 46
-  },
-  "visibility": 10000,
-  "wind": {
-    "speed": 13.8,
-    "deg": 330
-  },
-  "clouds": {
-    "all": 20
-  },
-  "dt": 1637959935,
-  "sys": {
-    "type": 1,
-    "id": 8074,
-    "country": "JP",
-    "sunrise": 1637962124,
-    "sunset": 1637998151
-  },
-  "timezone": 32400,
-  "id": 1850144,
-  "name": "Tokyo",
-  "cod": 200
